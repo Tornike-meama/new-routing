@@ -1,9 +1,9 @@
 import { ClientsModule } from "../routes/ClientsModule";
 import { ClientPageKeys } from "../routes/ClientsModule/customer";
-import { getPersmissions } from "../routes/PrivateRoutes";
+import usePersmissions from '../hooks/usePermission.hook';
 
 const Customers = () => {
-  const { add, update, remove } = getPersmissions(
+  const { actions: {add, update, remove} } = usePersmissions(
     ClientsModule.moduleKey,
     ClientPageKeys
   );

@@ -1,6 +1,5 @@
 import { allModule } from "../routes";
-import { PageRoutes } from "../routes/types/route.types";
-import { DrawerItem, DrawerRoutes, RoutesType } from "./route.types";
+import { DrawerItem, DrawerRoutes, PageRoutes, RoutesType } from "./route.types";
 import { generateValidUrlFromName } from "./routes.helper";
 
 //routes

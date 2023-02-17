@@ -3,9 +3,10 @@ import { Link } from "react-router-dom";
 import { Route, Routes } from "react-router";
 
 import { DrawerItem, RoutesType } from "./routing/route.types";
-import PrivateRoute from "./routes/PrivateRoutes";
+import PrivateRoute from "./wrappers/PrivateRoutes";
 import Login from "./pages/LogIn";
-import { getDrawerRoutes, userClaims } from "./routing/routes";
+import { getDrawerRoutes, userClaims as constUserClaims } from "./routing/routing";
+import  { PermissionsContext } from "./hooks/usePermission.hook";
 
 import "./App.css";
 
@@ -17,6 +18,7 @@ function App() {
 
   const [showLoading, setShowLoading] = useState<boolean>(false);
   const [logedIn, setLogedIn] = useState<boolean>(false);
+  const [userClaimsState, setUserClaimsState] = useState<string[]>([])
 
   const loginhandler = () => {
     localStorage.setItem(tokenKey, "tes_user_token");
@@ -27,11 +29,11 @@ function App() {
     setLogedIn(false);
   };
 
-  async function GetUserData(): Promise<boolean> {
+  async function GetUserData(): Promise<string[]> {
     setShowLoading(true);
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        resolve(true);
+        resolve(constUserClaims);
         setShowLoading(false);
       }, 1000);
     });
@@ -39,8 +41,9 @@ function App() {
 
   useEffect(() => {
     GetUserData()
-      .then(() => {
-        const { routes, drawer } = getDrawerRoutes(userClaims);
+      .then((claims: string[]) => {
+        const { routes, drawer } = getDrawerRoutes(claims);
+        setUserClaimsState(claims);
         setRoutes(routes);
         setDrawer(drawer);
         setLogedIn(true);
@@ -80,64 +83,60 @@ function App() {
     });
   }
 
+  function generateDrawerExtenstion(items: DrawerItem[], callBack: any = (page: DrawerItem) => {}) {
+    return items.map((page: DrawerItem) => {
+      if (page?.childItems?.length) {
+        return <li>
+                {callBack(page)}
+                {generateDrawerExtenstion(page.childItems, callBack)}
+              </li>
+      } else {
+        return callBack(page)
+      }
+    });
+  };
+
   return (
     <div className="App">
       <header className="App-header">
         <div className="header-container">
-          {logedIn && <div onClick={logOuthandler}>Log out</div>}
           <ul className="ul">
-            {logedIn &&
-              drawer.map((module: DrawerItem) => {
-                if (module?.childItems?.length) {
-                  return (
-                    <li className="module-container">
-                      <div>{module.name}</div>
-                      {generateDrawerItems(module.childItems)}
-                    </li>
-                  );
-                } else
-                  return module.to ? (
-                    <li>
-                      <Link
-                        className="subPages"
-                        to={module.to ?? ""}
-                        key={module.name}
-                      >
-                        {module.name}
-                      </Link>
-                    </li>
-                  ) : (
-                    <li>{module.name}</li>
-                  );
-              })}
+          {logedIn && <li><div onClick={logOuthandler}>Log out</div></li>}
+            {logedIn 
+              && generateDrawerExtenstion(drawer, 
+                    (page: DrawerItem) => page.to 
+                      ? <Link className="subPages" to={page.to ?? ""} key={page.name}>{page.name}</Link> 
+                      : page.name )}
           </ul>
         </div>
       </header>
+     <PermissionsContext.Provider value={{userClaims: userClaimsState}}>
       <Routes>
-        {/* privitae routes by router  */}
-        {routes.map((o: RoutesType) => {
-          return (
-            <Route
-              key={o.moduleKey}
-              path={o.to}
-              element={
-                <PrivateRoute
-                  isLogedIn={logedIn}
-                  moduleKey={o.moduleKey}
-                  pageKeys={o.pageKeys}
-                  Component={o.Component}
-                  UnAuthorizedPage={() => (
-                    <Login
-                      loginhandler={loginhandler}
-                      logOuthandler={logOuthandler}
-                    />
-                  )}
-                />
-              }
-            />
-          );
-        })}
-      </Routes>
+          {/* privitae routes by router  */}
+          {routes.map((o: RoutesType) => {
+            return (
+              <Route
+                key={o.moduleKey}
+                path={o.to}
+                element={
+                  <PrivateRoute
+                    isLogedIn={logedIn}
+                    moduleKey={o.moduleKey}
+                    pageKeys={o.pageKeys}
+                    Component={o.Component}
+                    UnAuthorizedPage={() => (
+                      <Login
+                        loginhandler={loginhandler}
+                        logOuthandler={logOuthandler}
+                      />
+                    )}
+                  />
+                }
+              />
+            );
+          })}
+        </Routes>
+     </PermissionsContext.Provider>
     </div>
   );
 }

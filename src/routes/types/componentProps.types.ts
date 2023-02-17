@@ -1,4 +1,4 @@
-import { Actions } from "./route.types";
+import { Actions } from "../../routing/route.types";
 
 export type PageProps = {
   actions: Actions;

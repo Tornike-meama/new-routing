@@ -1,4 +1,4 @@
-import { Modules } from "../types/route.types";
+import { Modules } from "../../routing/route.types";
 import { ClientRoutes } from "./customer";
 
 export const ClientsModule: Modules = {
