@@ -60,6 +60,7 @@ function App() {
       .then((claims: string[]) => {
         const { routes, drawer } = getDrawerRoutes(claims, allModule);
         setUserClaimsState(claims);
+        console.log(routes, "routes");
         setRoutes(routes);
         setDrawer(drawer);
         setLogedIn(true);

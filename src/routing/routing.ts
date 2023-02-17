@@ -4,38 +4,47 @@ import { generateValidUrlFromName } from "./routes.helper";
 //routes
 export function getRoutes(allModule: Modules[]) {
   return allModule.flatMap((module) =>
-    getRoutesStructure(module.subPages, module.name, module.moduleKey)
+    getRoutesRecurse(module.subPages, module.name, module.moduleKey)
   );
 }
 
-function getRoutesStructure(
+function getRoutesRecurse(
   pages: PageRoutes[],
-  moduleName: string,
+  baseUrl: string,
   moduleKey: string
 ): RoutesType[] {
   let arr: RoutesType[] = [];
+  
   pages.forEach((page: PageRoutes) => {
+    console.log(
+      baseUrl,
+      `${generateValidUrlFromName(baseUrl)}/${page.url ?? generateValidUrlFromName(page.name)}`,
+       page.name, 
+       "baseUrl"
+    );
     if (!page.component) {
-      return arr.push(
-        ...getRoutesStructure(
+      arr.push(
+        ...getRoutesRecurse(
           page.subPages ?? [],
-          `${generateValidUrlFromName(moduleName)}/${page.url ?? generateValidUrlFromName(page.name)}`,
+          `${generateValidUrlFromName(baseUrl)}/${page.url || generateValidUrlFromName(page.name)}`,
           page.pageKeys.pageKey
         )
       );
+    } else {
+      const route = {
+        to: `${generateValidUrlFromName(baseUrl)}/${page.url || generateValidUrlFromName(page.name)}`,
+        moduleKey: moduleKey,
+        pageKeys: page.pageKeys,
+        Component: page.component,
+      };
+      arr.push(route);
+      if (page.subPages?.length) {
+        arr.push(
+          ...getRoutesRecurse(page.subPages, route.to, page.pageKeys.pageKey)
+        );
+      }
     }
-    const route = {
-      to: `${generateValidUrlFromName(moduleName)}/${page.url ?? generateValidUrlFromName(page.name)}`,
-      moduleKey: moduleKey,
-      pageKeys: page.pageKeys,
-      Component: page.component,
-    };
-    arr.push(route);
-    if (page.subPages?.length) {
-      return arr.push(
-        ...getRoutesStructure(page.subPages, route.to, page.pageKeys.pageKey)
-      );
-    }
+    
   });
   return arr;
 }

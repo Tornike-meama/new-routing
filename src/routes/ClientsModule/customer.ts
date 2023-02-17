@@ -31,15 +31,15 @@ export const ListRoute: PageRoutes = {
   component: null,
   subPages: [
     {
-      url: "clientSubPage",
+      url: "customerssubpage",
       name: "customers sub page",
       showDrawer: true,
       pageKeys: ClientSubPageKeys,
       component: ClientSubPage,
       subPages: [
         {
-          url: "addOrUpdate",
-          name: "addOrUpdate",
+          url: "addOrUpdate/:id",
+          name: "addOrUpdatewithId",
           showDrawer: true,
           pageKeys: ClientPageKeys,
           component: CustomerAddOrUpdate,
@@ -47,8 +47,8 @@ export const ListRoute: PageRoutes = {
       ],
     },
     {
-      url: "clientSubPage2",
-      name: "customers sub page2",
+      url: "b2b",
+      name: "b2b client",
       showDrawer: true,
       pageKeys: ClientSubPageKeys2,
       component: ClientSubPage,
@@ -59,7 +59,7 @@ export const ListRoute: PageRoutes = {
 export const AddOrUpdate: PageRoutes = {
   url: "addOrUpdate",
   name: "addOrUpdate",
-  showDrawer: false,
+  showDrawer: true,
   pageKeys: ClientPageKeys,
   component: CustomerAddOrUpdate,
 };

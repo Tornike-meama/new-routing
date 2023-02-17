@@ -1,6 +1,6 @@
 import { createContext, useContext} from "react";
 import { Acceseses } from "../routing/route.types";
-import { Actions } from "../wrappers/types.wrapper";
+import { Actions } from "../wrappers/wrapper.types";
 
 type UserPermissionReturnType = {
   setUserClaims: any;

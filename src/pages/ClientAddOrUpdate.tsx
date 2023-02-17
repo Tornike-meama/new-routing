@@ -1,7 +1,11 @@
 import React from "react";
+import { useParams } from "react-router";
 
 const CustomerAddOrUpdate = () => {
-  return <h1>add orpdate customers</h1>;
+  const params = useParams();
+  return <h1>
+    customer updtae: {params.id}
+  </h1>;
 };
 
 export default CustomerAddOrUpdate;

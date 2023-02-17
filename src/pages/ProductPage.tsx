@@ -1,8 +1,9 @@
-import { PageProps } from "../routes/types/componentProps.types";
+import usePersmissions from "../hooks/usePermission.hook";
+import { ProductPageKeys } from './../routes/EcommerceModule/product';
+import { EcommerceModule } from './../routes/EcommerceModule/index';
 
-const ProductPages = ({
-  actions: { add, remove, update, downlaodFile },
-}: PageProps) => {
+const ProductPages = () => {
+  const {actions: {add, remove, update, downlaodFile}} = usePersmissions(EcommerceModule.moduleKey ,ProductPageKeys)
   return (
     <div>
       {add && <h1>add</h1>}

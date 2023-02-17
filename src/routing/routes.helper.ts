@@ -1,1 +1,1 @@
-export const generateValidUrlFromName = (name: string) => name.split(" ").join("-");
+export const generateValidUrlFromName = (name: string) => name.split(" ").join("");
