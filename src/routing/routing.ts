@@ -1,9 +1,8 @@
-import { allModule } from "../routes";
-import { DrawerItem, DrawerRoutes, PageRoutes, RoutesType } from "./route.types";
+import { DrawerItem, DrawerRoutes, Modules, PageRoutes, RoutesType } from "./route.types";
 import { generateValidUrlFromName } from "./routes.helper";
 
 //routes
-export function getRoutes() {
+export function getRoutes(allModule: Modules[]) {
   return allModule.flatMap((module) =>
     getRoutesStructure(module.subPages, module.name, module.moduleKey)
   );
@@ -42,7 +41,7 @@ function getRoutesStructure(
 }
 
 //drawer
-export function getDrawerItems(claims: string[]) {
+export function getDrawerItems(claims: string[], allModule: Modules[]) {
   //loop all module
   const drawerItems = allModule.reduce<DrawerItem[]>((acc, module) => {
     if (!module.showDrawer) return acc;
@@ -97,9 +96,9 @@ function getDrawerItemRecurse(
 }
 
 //get drawer items and routes 
-export function getDrawerRoutes(claims: string[]): DrawerRoutes {
-  const routes = getRoutes();
-  const drawer = getDrawerItems(claims);
+export function getDrawerRoutes(claims: string[], allModule: Modules[]): DrawerRoutes {
+  const routes = getRoutes(allModule);
+  const drawer = getDrawerItems(claims, allModule);
   return { routes, drawer };
 }
 

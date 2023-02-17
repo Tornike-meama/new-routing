@@ -24,11 +24,11 @@ export const ClientSubPageKeys2 = {
 } as const;
 
 export const ListRoute: PageRoutes = {
-  url: "customers_base",
-  name: "customers_page",
+  url: "",
+  name: "customers_base",
   showDrawer: true,
   pageKeys: ClientPageKeys,
-  component: Customers,
+  component: null,
   subPages: [
     {
       url: "clientSubPage",

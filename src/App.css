@@ -51,10 +51,15 @@
   /* margin-left: 30px; */
 }
 
-.subPages {
+.subPagesLink {
   margin-left: 30px;
   font-size: 18px;
   color: red;
+}
+
+.subPages {
+  margin-left: 30px;
+  font-size: 18px;
 }
 
 .ul {

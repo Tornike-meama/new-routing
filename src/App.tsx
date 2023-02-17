@@ -9,8 +9,24 @@ import { getDrawerRoutes, userClaims as constUserClaims } from "./routing/routin
 import  { PermissionsContext } from "./hooks/usePermission.hook";
 
 import "./App.css";
+import { allModule } from "./routes";
 
 const tokenKey = "userToken";
+
+
+function generateDrawerExtenstion(items: DrawerItem[], callBack: any = (page: DrawerItem) => {}) {
+  return items.map((page: DrawerItem) => {
+    if (page?.childItems?.length) {
+      return <li className="subPages">
+              {callBack(page)}
+              {generateDrawerExtenstion(page.childItems, callBack)}
+            </li>
+    } else {
+      return <li>{callBack(page)}</li>
+    }
+  });
+};
+
 
 function App() {
   const [routes, setRoutes] = useState<RoutesType[]>([]);
@@ -42,7 +58,7 @@ function App() {
   useEffect(() => {
     GetUserData()
       .then((claims: string[]) => {
-        const { routes, drawer } = getDrawerRoutes(claims);
+        const { routes, drawer } = getDrawerRoutes(claims, allModule);
         setUserClaimsState(claims);
         setRoutes(routes);
         setDrawer(drawer);
@@ -83,18 +99,6 @@ function App() {
     });
   }
 
-  function generateDrawerExtenstion(items: DrawerItem[], callBack: any = (page: DrawerItem) => {}) {
-    return items.map((page: DrawerItem) => {
-      if (page?.childItems?.length) {
-        return <li>
-                {callBack(page)}
-                {generateDrawerExtenstion(page.childItems, callBack)}
-              </li>
-      } else {
-        return callBack(page)
-      }
-    });
-  };
 
   return (
     <div className="App">
@@ -105,8 +109,8 @@ function App() {
             {logedIn 
               && generateDrawerExtenstion(drawer, 
                     (page: DrawerItem) => page.to 
-                      ? <Link className="subPages" to={page.to ?? ""} key={page.name}>{page.name}</Link> 
-                      : page.name )}
+                      ? <Link className="subPagesLink" to={page.to ?? ""} key={page.name}>{page.name}</Link> 
+                      : <li className="subPages">{page.name}</li> )}
           </ul>
         </div>
       </header>
