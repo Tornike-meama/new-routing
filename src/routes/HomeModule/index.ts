@@ -1,4 +1,4 @@
-import { Modules } from "../../routing/route.types";
+import { Modules } from "../../types/route.types";
 import { HomeRoutes } from "./home";
 
 export const HomeModule: Modules = {

@@ -1,4 +1,4 @@
-import { PrivteRouteProps } from "./wrapper.types";
+import { PrivteRouteProps } from "../types/wrapper.types";
 import usePersmissions from "../hooks/usePermission.hook";
 
 const PrivateRoute = ({

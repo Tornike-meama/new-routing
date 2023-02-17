@@ -1,5 +1,5 @@
 import Home from "../../pages/Home";
-import { PageRoutes } from "../../routing/route.types";
+import { PageRoutes } from "../../types/route.types";
 
 export const HomePageKeys = {
   pageKey: "ProjectPolicys_ECommerceModule_HomePage",

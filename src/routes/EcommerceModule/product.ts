@@ -1,5 +1,5 @@
 import ProductPages from "../../pages/ProductPage";
-import { PageRoutes } from "../../routing/route.types";
+import { PageRoutes } from "../../types/route.types";
 
 export const ProductPageKeys = {
   pageKey: "ProjectPolicys_ECommerceModule_ProductPage",

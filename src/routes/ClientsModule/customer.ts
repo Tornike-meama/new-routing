@@ -1,7 +1,7 @@
 import CustomerAddOrUpdate from "../../pages/ClientAddOrUpdate";
 import ClientSubPage from "../../pages/ClientSubPage";
 import Customers from "../../pages/CustomerPage";
-import { PageRoutes } from "../../routing/route.types";
+import { PageRoutes } from "../../types/route.types";
 
 export const ClientPageKeys = {
   pageKey: "ProjectPolicys_CustomersModule_CustomerPage",

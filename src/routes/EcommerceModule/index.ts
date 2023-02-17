@@ -1,4 +1,4 @@
-import { Modules } from "../../routing/route.types";
+import { Modules } from "../../types/route.types";
 import { ProductRoutes } from "./product";
 
 export const EcommerceModule: Modules = {

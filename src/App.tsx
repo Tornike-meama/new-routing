@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Route, Routes } from "react-router";
 
-import { DrawerItem, RoutesType } from "./routing/route.types";
-import PrivateRoute from "./wrappers/PrivateRoutes";
+import { DrawerItem, RoutesType } from "./types/route.types";
+import PrivateRoute from "./components/PrivateRoutes";
 import Login from "./pages/LogIn";
-import { getDrawerRoutes, userClaims as constUserClaims } from "./routing/routing";
+import { getDrawerRoutes, userClaims as constUserClaims } from "./helpers/routing.helpers";
 import  { PermissionsContext } from "./hooks/usePermission.hook";
 
 import "./App.css";
@@ -14,7 +14,7 @@ import { allModule } from "./routes";
 const tokenKey = "userToken";
 
 
-function generateDrawerExtenstion(items: DrawerItem[], callBack: any = (page: DrawerItem) => {}) {
+function generateDrawerExtenstion(items: DrawerItem[], callBack: (page: DrawerItem) => ReactNode) {
   return items.map((page: DrawerItem) => {
     if (page?.childItems?.length) {
       return <li className="subPages">

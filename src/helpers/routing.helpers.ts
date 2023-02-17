@@ -1,14 +1,14 @@
-import { DrawerItem, DrawerRoutes, Modules, PageRoutes, RoutesType } from "./route.types";
-import { generateValidUrlFromName } from "./routes.helper";
+import { DrawerItem, DrawerRoutes, Modules, PageRoutes, RoutesType } from "../types";
+import { generateValidUrlFromName } from "./common.helpers";
 
 //routes
 export function getRoutes(allModule: Modules[]) {
   return allModule.flatMap((module) =>
-    getRoutesRecurse(module.subPages, module.name, module.moduleKey)
+    getRoutesrecursion(module.subPages, module.name, module.moduleKey)
   );
 }
 
-function getRoutesRecurse(
+function getRoutesrecursion(
   pages: PageRoutes[],
   baseUrl: string,
   moduleKey: string
@@ -16,15 +16,9 @@ function getRoutesRecurse(
   let arr: RoutesType[] = [];
   
   pages.forEach((page: PageRoutes) => {
-    console.log(
-      baseUrl,
-      `${generateValidUrlFromName(baseUrl)}/${page.url ?? generateValidUrlFromName(page.name)}`,
-       page.name, 
-       "baseUrl"
-    );
     if (!page.component) {
       arr.push(
-        ...getRoutesRecurse(
+        ...getRoutesrecursion(
           page.subPages ?? [],
           `${generateValidUrlFromName(baseUrl)}/${page.url || generateValidUrlFromName(page.name)}`,
           page.pageKeys.pageKey
@@ -40,7 +34,7 @@ function getRoutesRecurse(
       arr.push(route);
       if (page.subPages?.length) {
         arr.push(
-          ...getRoutesRecurse(page.subPages, route.to, page.pageKeys.pageKey)
+          ...getRoutesrecursion(page.subPages, route.to, page.pageKeys.pageKey)
         );
       }
     }
@@ -63,7 +57,7 @@ export function getDrawerItems(claims: string[], allModule: Modules[]) {
     } as DrawerItem;
 
     //check user access for full module
-    moduleItem.childItems = getDrawerItemRecurse(module.subPages, module.moduleKey, `/${module.name}`, claims);
+    moduleItem.childItems = getDrawerItemrecursion(module.subPages, module.moduleKey, `/${module.name}`, claims);
     //if user haven't access full module or any page inside this module not showing in drawer
     moduleItem.childItems?.length > 0 && acc.push(moduleItem); //TODO: make this better
     return acc;
@@ -72,7 +66,7 @@ export function getDrawerItems(claims: string[], allModule: Modules[]) {
   return drawerItems;
 }
 
-function getDrawerItemRecurse(
+function getDrawerItemrecursion(
   pages: PageRoutes[],
   moduleKey: string,
   prevUrl: string,
@@ -87,9 +81,9 @@ function getDrawerItemRecurse(
         childItems: [],
       } as DrawerItem;
 
-      //recurse pages if have sub pages
+      //recursion pages if have sub pages
       if (page.subPages !== undefined && page.subPages?.length > 0) {
-        subPageItem.childItems = getDrawerItemRecurse(
+        subPageItem.childItems = getDrawerItemrecursion(
           page.subPages,
           moduleKey,
           subPageItem.to ?? `${prevUrl}/${page.name.split(" ").join("")}`,
