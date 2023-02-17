@@ -1,8 +1,15 @@
 import { allModule } from "../routes";
 import { PageRoutes } from "../routes/types/route.types";
 import { DrawerItem, DrawerRoutes, RoutesType } from "./route.types";
+import { generateValidUrlFromName } from "./routes.helper";
 
 //routes
+export function getRoutes() {
+  return allModule.flatMap((module) =>
+    getRoutesStructure(module.subPages, module.name, module.moduleKey)
+  );
+}
+
 function getRoutesStructure(
   pages: PageRoutes[],
   moduleName: string,
@@ -14,13 +21,13 @@ function getRoutesStructure(
       return arr.push(
         ...getRoutesStructure(
           page.subPages ?? [],
-          `${moduleName}/${page.url ?? page.name}`,
+          `${generateValidUrlFromName(moduleName)}/${page.url ?? generateValidUrlFromName(page.name)}`,
           page.pageKeys.pageKey
         )
       );
     }
     const route = {
-      to: `${moduleName}/${page.url ?? page.name}`,
+      to: `${generateValidUrlFromName(moduleName)}/${page.url ?? generateValidUrlFromName(page.name)}`,
       moduleKey: moduleKey,
       pageKeys: page.pageKeys,
       Component: page.component,
@@ -35,46 +42,23 @@ function getRoutesStructure(
   return arr;
 }
 
-function getRoutes() {
-  return allModule.flatMap((module) =>
-    getRoutesStructure(module.subPages, module.name, module.moduleKey)
-  );
-}
-
 //drawer
-function getDrawerItems(claims: string[]) {
+export function getDrawerItems(claims: string[]) {
+  //loop all module
   const drawerItems = allModule.reduce<DrawerItem[]>((acc, module) => {
     if (!module.showDrawer) return acc;
 
-    if (claims.includes(module.moduleKey)) {
-      let drawerItem = {
-        name: module.name,
-        to: undefined,
-        childItems: [],
-      } as DrawerItem;
+    //initilize module fro drawer
+    let moduleItem = {
+      name: module.name,
+      to: undefined,
+      childItems: [],
+    } as DrawerItem;
 
-      drawerItem.childItems = getDrawerItemRecurse(
-        module.subPages,
-        `/${module.name}`,
-        claims
-      );
-
-      acc.push(drawerItem);
-    } else {
-      let drawerItem = {
-        name: module.name,
-        to: undefined,
-        childItems: [],
-      } as DrawerItem;
-
-      drawerItem.childItems = getDrawerItemRecurse(
-        module.subPages,
-        `/${module.name}`,
-        claims
-      );
-
-      acc.push(drawerItem);
-    }
+    //check user access for full module
+    moduleItem.childItems = getDrawerItemRecurse(module.subPages, module.moduleKey, `/${module.name}`, claims);
+    //if user haven't access full module or any page inside this module not showing in drawer
+    moduleItem.childItems?.length > 0 && acc.push(moduleItem); //TODO: make this better
     return acc;
   }, []);
 
@@ -83,36 +67,37 @@ function getDrawerItems(claims: string[]) {
 
 function getDrawerItemRecurse(
   pages: PageRoutes[],
+  moduleKey: string,
   prevUrl: string,
   claims: string[]
 ): DrawerItem[] {
   return pages.reduce<DrawerItem[]>((acc, page) => {
-    if (
-      claims.some(
-        (key) => key === page.pageKeys.pageKey || key === page.pageKeys.get
-      ) &&
-      page.showDrawer
-    ) {
+    //check if user have access full page or access get action and check show in drawer
+    if (claims.some((key) => key === moduleKey || key === page.pageKeys.pageKey || key === page.pageKeys.get) && page.showDrawer ) {
       let subPageItem = {
         name: page.name,
         to: page.url ? `${prevUrl}/${page.url}` : null,
         childItems: [],
       } as DrawerItem;
 
+      //recurse pages if have sub pages
       if (page.subPages !== undefined && page.subPages?.length > 0) {
         subPageItem.childItems = getDrawerItemRecurse(
           page.subPages,
+          moduleKey,
           subPageItem.to ?? `${prevUrl}/${page.name.split(" ").join("")}`,
           claims
         );
-        acc.push(subPageItem);
-      } else acc.push(subPageItem);
+      };
 
-      return acc;
-    } else return acc;
+      acc.push(subPageItem);
+    };
+     
+    return acc;
   }, []);
 }
 
+//get drawer items and routes 
 export function getDrawerRoutes(claims: string[]): DrawerRoutes {
   const routes = getRoutes();
   const drawer = getDrawerItems(claims);
