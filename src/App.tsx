@@ -1,26 +1,49 @@
 import { ReactNode, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Route, Routes } from "react-router";
+import {DrawerItem, RoutesType, getDrawerRoutes, PrivateRoute, PermissionProvider} from "@Tornike-meama/ds-routing";
 
-import { DrawerItem, RoutesType } from "./types/route.types";
-import PrivateRoute from "./components/PrivateRoutes";
 import Login from "./pages/LogIn";
-import { getDrawerRoutes, userClaims as constUserClaims } from "./helpers/routing.helpers";
-import  { PermissionsContext } from "./hooks/usePermission.hook";
 
 import "./App.css";
 import { allModule } from "./routes";
 
 const tokenKey = "userToken";
 
+const Static_User_Claims = [
+  "ProjectPolicys_HomeModule",
+
+  "ProjectPolicys_ERPModuleModule",
+  "ProjectPolicys_FinancesModule",
+  "ProjectPolicys_OffersModule",
+  "ProjectPolicys_PaymentModule",
+  "ProjectPolicys_CoreModule",
+  "ProjectPolicys_B2BHoreka",
+  "ProjectPolicys_ProductModule",
+  // "ProjectPolicys_ECommerceModule",
+  "ProjectPolicys_ECommerceModule_ProductPage_Get",
+  // "ProjectPolicys_ECommerceModule_ProductPage_Add",
+  "ProjectPolicys_CustomersModule_CustomerPage_donwlaod",
+  // "ProjectPolicys_CustomersModule_CustomerPage",
+  "ProjectPolicys_CustomersModule_CustomerPage_Get",
+  "ProjectPolicys_CustomersModule_CustomerPage_Add",
+  "ProjectPolicys_CustomersModule_CustomerPage_Remove",
+
+  "ProjectPolicys_CustomersModule_CustomerSubPage_Add",
+  "ProjectPolicys_CustomersModule_CustomerSubPage_Get",
+  "ProjectPolicys_CustomersModule_CustomerSub2Page_Get",
+  // "ProjectPolicys_CustomersModule_CustomerSubPage",
+  // "ProjectPolicys_CustomersModule_CustomerPage_Update",
+];
+
 
 function generateDrawerExtenstion(items: DrawerItem[], callBack: (page: DrawerItem) => ReactNode) {
   return items.map((page: DrawerItem) => {
     if (page?.childItems?.length) {
-      return <li className="subPages">
+      return <ul className="ul">
               {callBack(page)}
-              {generateDrawerExtenstion(page.childItems, callBack)}
-            </li>
+              <li className="subPage">{generateDrawerExtenstion(page.childItems, callBack)}</li>
+            </ul>
     } else {
       return <li>{callBack(page)}</li>
     }
@@ -49,7 +72,7 @@ function App() {
     setShowLoading(true);
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        resolve(constUserClaims);
+        resolve(Static_User_Claims);
         setShowLoading(false);
       }, 1000);
     });
@@ -60,7 +83,6 @@ function App() {
       .then((claims: string[]) => {
         const { routes, drawer } = getDrawerRoutes(claims, allModule);
         setUserClaimsState(claims);
-        console.log(routes, "routes");
         setRoutes(routes);
         setDrawer(drawer);
         setLogedIn(true);
@@ -108,15 +130,15 @@ function App() {
           <ul className="ul">
           {logedIn && <li><div onClick={logOuthandler}>Log out</div></li>}
             {logedIn 
-              && generateDrawerExtenstion(drawer, 
+              ? generateDrawerExtenstion(drawer, 
                     (page: DrawerItem) => page.to 
                       ? <Link className="subPagesLink" to={page.to ?? ""} key={page.name}>{page.name}</Link> 
-                      : <li className="subPages">{page.name}</li> )}
+                      : page.name ) : <li>test</li>}
           </ul>
         </div>
       </header>
-     <PermissionsContext.Provider value={{userClaims: userClaimsState}}>
-      <Routes>
+     <PermissionProvider userClaims={userClaimsState}>
+        <Routes>
           {/* privitae routes by router  */}
           {routes.map((o: RoutesType) => {
             return (
@@ -141,7 +163,7 @@ function App() {
             );
           })}
         </Routes>
-     </PermissionsContext.Provider>
+     </PermissionProvider>
     </div>
   );
 }

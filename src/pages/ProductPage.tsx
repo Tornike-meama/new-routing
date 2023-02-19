@@ -1,4 +1,6 @@
-import usePersmissions from "../hooks/usePermission.hook";
+import React from 'react';
+import {usePersmissions} from "@Tornike-meama/ds-routing";
+
 import { ProductPageKeys } from './../routes/EcommerceModule/product';
 import { EcommerceModule } from './../routes/EcommerceModule/index';
 

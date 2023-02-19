@@ -1,5 +1,5 @@
+import { PageRoutes } from "@Tornike-meama/ds-routing";
 import Home from "../../pages/Home";
-import { PageRoutes } from "../../types/route.types";
 
 export const HomePageKeys = {
   pageKey: "ProjectPolicys_ECommerceModule_HomePage",

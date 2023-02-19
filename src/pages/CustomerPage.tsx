@@ -1,12 +1,13 @@
 import { ClientsModule } from "../routes/ClientsModule";
 import { ClientPageKeys } from "../routes/ClientsModule/customer";
-import usePersmissions from '../hooks/usePermission.hook';
+import {usePersmissions} from "@Tornike-meama/ds-routing";
 
 const Customers = () => {
   const { actions: {add, update, remove} } = usePersmissions(
     ClientsModule.moduleKey,
     ClientPageKeys
   );
+
   return (
     <div>
       {add && <div>Add access</div>}

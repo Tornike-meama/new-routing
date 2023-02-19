@@ -6,7 +6,9 @@ type LoginPageProps = {
 const Login = ({ loginhandler }: LoginPageProps) => {
   return (
     <div>
-      <div onClick={loginhandler}>log in</div>
+      <div onClick={() => {
+        loginhandler();
+      }}>log in</div>
     </div>
   );
 };
