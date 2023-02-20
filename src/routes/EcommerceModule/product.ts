@@ -5,7 +5,7 @@ export const ProductPageKeys = {
   pageKey: "ProjectPolicys_ECommerceModule_ProductPage",
   get: "ProjectPolicys_ECommerceModule_ProductPage_Get",
   add: "ProjectPolicys_ECommerceModule_ProductPage_Add",
-  downlaodFile: "ProjectPolicys_CustomersModule_CustomerPage_donwlaod",
+  downlaodFile: "ProjectPolicys_CustomersModule_ProductPage_donwlaod",
 } as const;
 
 export const ProductListRoutes: PageRoutes = {

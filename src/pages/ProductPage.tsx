@@ -1,13 +1,14 @@
 import React from 'react';
-import {usePersmissions} from "@Tornike-meama/ds-routing";
+import {usePersmissions} from "../packageTest";
 
 import { ProductPageKeys } from './../routes/EcommerceModule/product';
-import { EcommerceModule } from './../routes/EcommerceModule/index';
 
 const ProductPages = () => {
-  const {actions: {add, remove, update, downlaodFile}} = usePersmissions(EcommerceModule.moduleKey ,ProductPageKeys)
+  const {actions: {get, add, remove, update, downlaodFile}} = usePersmissions(ProductPageKeys)
   return (
     <div>
+      <h1>products</h1>
+      {get && <h1>get</h1>}
       {add && <h1>add</h1>}
       {remove && <h1>remove</h1>}
       {update && <h1>update</h1>}

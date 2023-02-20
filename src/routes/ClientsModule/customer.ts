@@ -23,6 +23,12 @@ export const ClientSubPageKeys2 = {
   get: "ProjectPolicys_CustomersModule_CustomerSub2Page_Get",
 } as const;
 
+export const ClientAddOrUpdate = {
+  pageKey: "ProjectPolicys_CustomersModule_CustomerSub2AddOrUpdatePage",
+  add: "ProjectPolicys_CustomersModule_CustomerSub2AddOrUpdatePage_Add",
+  get: "ProjectPolicys_CustomersModule_CustomerSub2AddOrUpdatePage_Get",
+} as const;
+
 export const ListRoute: PageRoutes = {
   url: "",
   name: "customers_base",
@@ -41,7 +47,7 @@ export const ListRoute: PageRoutes = {
           url: "addOrUpdate/:id",
           name: "addOrUpdatewithId",
           showDrawer: true,
-          pageKeys: ClientPageKeys,
+          pageKeys: ClientAddOrUpdate,
           component: CustomerAddOrUpdate,
         },
       ],

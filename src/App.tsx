@@ -1,7 +1,7 @@
 import { ReactNode, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Route, Routes } from "react-router";
-import {DrawerItem, RoutesType, getDrawerRoutes, PrivateRoute, PermissionProvider} from "@Tornike-meama/ds-routing";
+import {DrawerItem, RoutesType, PrivateRoute, PermissionProvider, useInitRouter} from "./packageTest/index";
 
 import Login from "./pages/LogIn";
 
@@ -21,10 +21,13 @@ const Static_User_Claims = [
   "ProjectPolicys_B2BHoreka",
   "ProjectPolicys_ProductModule",
   // "ProjectPolicys_ECommerceModule",
-  "ProjectPolicys_ECommerceModule_ProductPage_Get",
+  // "ProjectPolicys_ECommerceModule_ProductPage",
+  // "ProjectPolicys_ECommerceModule_ProductPage_Get",
+  "ProjectPolicys_CustomersModule_ProductPage_donwlaod",
   // "ProjectPolicys_ECommerceModule_ProductPage_Add",
-  "ProjectPolicys_CustomersModule_CustomerPage_donwlaod",
   // "ProjectPolicys_CustomersModule_CustomerPage",
+  "ProjectPolicys_CustomersModule_CustomerSub2AddOrUpdatePage_Add",
+  "ProjectPolicys_CustomersModule_CustomerSub2AddOrUpdatePage_Get",
   "ProjectPolicys_CustomersModule_CustomerPage_Get",
   "ProjectPolicys_CustomersModule_CustomerPage_Add",
   "ProjectPolicys_CustomersModule_CustomerPage_Remove",
@@ -52,13 +55,12 @@ function generateDrawerExtenstion(items: DrawerItem[], callBack: (page: DrawerIt
 
 
 function App() {
-  const [routes, setRoutes] = useState<RoutesType[]>([]);
-  const [drawer, setDrawer] = useState<DrawerItem[]>([]);
-
   const [showLoading, setShowLoading] = useState<boolean>(false);
   const [logedIn, setLogedIn] = useState<boolean>(false);
-  const [userClaimsState, setUserClaimsState] = useState<string[]>([])
+  const [userClaimsState, setUserClaimsState] = useState<string[]>([]);
 
+  const { drawerItems, routes, actions } = useInitRouter(userClaimsState, allModule);
+  
   const loginhandler = () => {
     localStorage.setItem(tokenKey, "tes_user_token");
     setLogedIn(true);
@@ -81,11 +83,8 @@ function App() {
   useEffect(() => {
     GetUserData()
       .then((claims: string[]) => {
-        const { routes, drawer } = getDrawerRoutes(claims, allModule);
         setUserClaimsState(claims);
-        setRoutes(routes);
-        setDrawer(drawer);
-        setLogedIn(true);
+        setLogedIn(false);
       })
       .catch(() => setLogedIn(false));
   }, []);
@@ -122,6 +121,7 @@ function App() {
     });
   }
 
+  console.log(routes, "routes")
 
   return (
     <div className="App">
@@ -130,14 +130,14 @@ function App() {
           <ul className="ul">
           {logedIn && <li><div onClick={logOuthandler}>Log out</div></li>}
             {logedIn 
-              ? generateDrawerExtenstion(drawer, 
+              ? generateDrawerExtenstion(drawerItems, 
                     (page: DrawerItem) => page.to 
                       ? <Link className="subPagesLink" to={page.to ?? ""} key={page.name}>{page.name}</Link> 
-                      : page.name ) : <li>test</li>}
+                      : page.name ) : <li>you must log in</li>}
           </ul>
         </div>
       </header>
-     <PermissionProvider userClaims={userClaimsState}>
+     <PermissionProvider userClaims={userClaimsState} userActions={actions}>
         <Routes>
           {/* privitae routes by router  */}
           {routes.map((o: RoutesType) => {
@@ -148,20 +148,24 @@ function App() {
                 element={
                   <PrivateRoute
                     isLogedIn={logedIn}
-                    moduleKey={o.moduleKey}
                     pageKeys={o.pageKeys}
                     Component={o.Component}
-                    UnAuthorizedPage={() => (
-                      <Login
-                        loginhandler={loginhandler}
-                        logOuthandler={logOuthandler}
-                      />
-                    )}
+                    unAuthorizedPage={<Login
+                      loginhandler={loginhandler}
+                      logOuthandler={logOuthandler}
+                    />}
                   />
                 }
               />
             );
-          })}
+          })};
+
+          {!logedIn && <Route path="*" element={<Login
+                      loginhandler={loginhandler}
+                      logOuthandler={logOuthandler}
+                    />}/>}
+
+        <Route path='*' element={<h1>404 not found or no permission</h1>}/>
         </Routes>
      </PermissionProvider>
     </div>
