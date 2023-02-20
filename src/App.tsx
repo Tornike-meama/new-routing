@@ -62,6 +62,12 @@ function App() {
   const { drawerItems, routes, actions } = useInitRouter(userClaimsState, allModule);
   
   const loginhandler = () => {
+    GetUserData()
+    .then((claims: string[]) => {
+      setUserClaimsState(claims);
+      setLogedIn(true);
+    })
+    .catch(() => setLogedIn(false));
     localStorage.setItem(tokenKey, "tes_user_token");
     setLogedIn(true);
   };
