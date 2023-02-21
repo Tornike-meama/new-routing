@@ -7,11 +7,10 @@ import {
   RouterType, 
   ActionByPageKey 
 } from "../types";
-import { generateValidUrlFromName } from './common.helpers';
+import { getValidUrl } from './common.helpers';
 
 //init router method which run first when applicaition load
 export function initRouter(claims: string[], allModule: Modules[]): RouterType {
-  console.log("reinit router");
   //loop all module
   let allActions = {};
   let allRoutes: RoutesType[] = [];
@@ -55,19 +54,21 @@ function getDrawerItemrecursion(
       //drawer items
       let subPageItem = {
         name: page.name,
-        to: page.url ? `${prevUrl}/${page.url}` : null,
+        to: getValidUrl(prevUrl, page.url), // page.url ? `${prevUrl}/${page.url}` : null,
         childItems: [],
       } as DrawerItem;
 
+      //current router url
+      const currentUrl = subPageItem.to ?? `${prevUrl}/${page.name.split(" ").join("")}`;
+
       //set routes
       if (page.component) {
-        const route = {
-          to: subPageItem.to ?? `${prevUrl}/${page.name.split(" ").join("")}`,
+        routes.push({
+          to: currentUrl,
           moduleKey: moduleKey,
           pageKeys: page.pageKeys,
           Component: page.component,
-        };
-        routes.push(route);
+        });
       };
 
       //recursion pages if have sub pages
@@ -75,7 +76,7 @@ function getDrawerItemrecursion(
         const subactions = getDrawerItemrecursion(
           page.subPages,
           moduleKey,
-          subPageItem.to ?? `${prevUrl}/${page.name.split(" ").join("")}`,
+          currentUrl,
           claims,
           allActions,
           routes

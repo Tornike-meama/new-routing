@@ -13,4 +13,4 @@ export type {
   RoutesType,
   RouterType
 } from "./route.types";
-export type { PrivteRouteProps } from "./wrapper.types";
+export type { PrivteRouteProps, UnAuthorizedRouteProps } from "./wrapper.types";

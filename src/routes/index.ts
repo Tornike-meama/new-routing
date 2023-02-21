@@ -7,5 +7,5 @@ import { HomeModule } from "./HomeModule";
 export const allModule: Modules[] = [
   ClientsModule,
   EcommerceModule,
-  HomeModule,
+  // HomeModule,
 ];

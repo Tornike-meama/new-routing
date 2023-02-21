@@ -1,12 +1,15 @@
 import { ReactNode, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Route, Routes } from "react-router";
-import {DrawerItem, RoutesType, PrivateRoute, PermissionProvider, useInitRouter} from "./packageTest/index";
+import { Route, Routes, useNavigate } from "react-router";
+import {DrawerItem, RoutesType, PrivateRoute, PermissionProvider, useInitRouter, UnAuthorizedRoute} from "./packageTest/index";
 
 import Login from "./pages/LogIn";
 
 import "./App.css";
 import { allModule } from "./routes";
+import ResetPassword from "./pages/ResetPassword";
+import Home from "./pages/Home";
+import AuthorizedPublicRoute from "./packageTest/src/components/AuthorizedPublicRoute";
 
 const tokenKey = "userToken";
 
@@ -22,8 +25,8 @@ const Static_User_Claims = [
   "ProjectPolicys_ProductModule",
   // "ProjectPolicys_ECommerceModule",
   // "ProjectPolicys_ECommerceModule_ProductPage",
-  // "ProjectPolicys_ECommerceModule_ProductPage_Get",
-  "ProjectPolicys_CustomersModule_ProductPage_donwlaod",
+  "ProjectPolicys_ECommerceModule_ProductPage_Get",
+  // "ProjectPolicys_CustomersModule_ProductPage_donwlaod",
   // "ProjectPolicys_ECommerceModule_ProductPage_Add",
   // "ProjectPolicys_CustomersModule_CustomerPage",
   "ProjectPolicys_CustomersModule_CustomerSub2AddOrUpdatePage_Add",
@@ -55,6 +58,8 @@ function generateDrawerExtenstion(items: DrawerItem[], callBack: (page: DrawerIt
 
 
 function App() {
+  const navigate = useNavigate();
+
   const [showLoading, setShowLoading] = useState<boolean>(false);
   const [logedIn, setLogedIn] = useState<boolean>(false);
   const [userClaimsState, setUserClaimsState] = useState<string[]>([]);
@@ -90,7 +95,7 @@ function App() {
     GetUserData()
       .then((claims: string[]) => {
         setUserClaimsState(claims);
-        setLogedIn(false);
+        setLogedIn(true);
       })
       .catch(() => setLogedIn(false));
   }, []);
@@ -166,10 +171,29 @@ function App() {
             );
           })};
 
-          {!logedIn && <Route path="*" element={<Login
+         <Route 
+          path="reset-password" 
+          element={<UnAuthorizedRoute 
+                    isLogedIn={logedIn} 
+                    redirectToHome={() => navigate("/")}
+                    Component={() => <ResetPassword />} 
+                    HomePageComponent={() => <Home />} 
+                    /> }  
+         />
+
+        <Route 
+          path="/" 
+          element={<AuthorizedPublicRoute 
+                    isLogedIn={logedIn} 
+                    UnAuthorizedPage={() => (
+                      <Login
                       loginhandler={loginhandler}
                       logOuthandler={logOuthandler}
-                    />}/>}
+                    />
+                    )}
+                    Component={() => <Home />} 
+                  /> }  
+         />
 
         <Route path='*' element={<h1>404 not found or no permission</h1>}/>
         </Routes>

@@ -8,3 +8,15 @@ export type PrivteRouteProps = {
   isLogedIn: boolean;
 };
 
+export type UnAuthorizedRouteProps = {
+  Component: () => JSX.Element;
+  HomePageComponent: () => JSX.Element;
+  redirectToHome: () => void;
+  isLogedIn: boolean;
+};
+
+export type AuthorizedPublicRouteProps = {
+  Component: () => JSX.Element;
+  UnAuthorizedPage: () => JSX.Element;
+  isLogedIn: boolean;
+};

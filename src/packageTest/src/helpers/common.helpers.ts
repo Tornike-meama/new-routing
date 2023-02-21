@@ -1,1 +1,6 @@
-export const generateValidUrlFromName = (name: string) => name.split(" ").join("");
+export const getValidUrl = (prevUrl: string, pageUrl: string) =>{
+  if(prevUrl === "/") {
+    return prevUrl
+  }
+  return pageUrl ? `${prevUrl}/${pageUrl}` : null;
+};
