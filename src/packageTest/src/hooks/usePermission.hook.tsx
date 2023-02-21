@@ -3,10 +3,10 @@ import { useClaimns, useUserActions } from "./useClaims.hook";
 
 
 export function usePersmissions(
-  pageKeys?: Acceseses
+  pageKey?: string
 ): UserPermissionReturnType {
   const userClaims = useClaimns();
   const actionsByKey = useUserActions();
 
-  return  { actions: pageKeys ? actionsByKey[pageKeys.pageKey] : {}, userClaims };
+  return  { actions: (pageKey && actionsByKey[pageKey]) ? actionsByKey[pageKey] : {}, userClaims };
 };

@@ -4,7 +4,7 @@ import {usePersmissions} from "../packageTest";
 import { ProductPageKeys } from './../routes/EcommerceModule/product';
 
 const ProductPages = () => {
-  const {actions: {get, add, remove, update, downlaodFile}} = usePersmissions(ProductPageKeys)
+  const {actions: {get, add, remove, update, downlaodFile}} = usePersmissions(ProductPageKeys.pageKey)
   return (
     <div>
       <h1>products</h1>

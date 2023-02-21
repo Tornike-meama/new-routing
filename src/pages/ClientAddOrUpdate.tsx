@@ -5,7 +5,7 @@ import { ClientAddOrUpdate, } from './../routes/ClientsModule/customer';
 
 const CustomerAddOrUpdate = () => {
   const params = useParams();
-  const {actions: {get}} = usePersmissions(ClientAddOrUpdate);
+  const {actions: {get}} = usePersmissions(ClientAddOrUpdate.pageKey);
   return <h1>
     customer updtae: {params.id}
   </h1>;

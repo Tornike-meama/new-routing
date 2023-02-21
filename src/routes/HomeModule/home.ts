@@ -5,7 +5,6 @@ export const HomePageKeys = {
   pageKey: "ProjectPolicys_ECommerceModule_HomePage",
   get: "ProjectPolicys_ECommerceModule_HomePage_Get",
   add: "ProjectPolicys_ECommerceModule_HomePage_Add",
-  downlaodFile: "ProjectPolicys_CustomersModule_CustomerPage_donwlaod",
 } as const;
 
 export const HomeListRoutes: PageRoutes = {

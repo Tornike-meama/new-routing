@@ -5,10 +5,10 @@ import { PrivteRouteProps } from "../types";
 export const PrivateRoute = ({
   Component,
   unAuthorizedPage,
-  pageKeys,
+  pageKey,
   isLogedIn,
 }: PrivteRouteProps) => {
-  const {actions} = usePersmissions(pageKeys);
+  const {actions} = usePersmissions(pageKey);
 
   if (!isLogedIn) return <React.Fragment>{unAuthorizedPage}</React.Fragment>;
 

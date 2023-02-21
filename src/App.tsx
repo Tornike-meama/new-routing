@@ -132,8 +132,6 @@ function App() {
     });
   }
 
-  console.log(routes, "routes")
-
   return (
     <div className="App">
       <header className="App-header">
@@ -148,56 +146,58 @@ function App() {
           </ul>
         </div>
       </header>
-     <PermissionProvider userClaims={userClaimsState} userActions={actions}>
-        <Routes>
-          {/* privitae routes by router  */}
-          {routes.map((o: RoutesType) => {
-            return (
-              <Route
-                key={o.moduleKey}
-                path={o.to}
-                element={
-                  <PrivateRoute
-                    isLogedIn={logedIn}
-                    pageKeys={o.pageKeys}
-                    Component={o.Component}
-                    unAuthorizedPage={<Login
-                      loginhandler={loginhandler}
-                      logOuthandler={logOuthandler}
-                    />}
-                  />
-                }
-              />
-            );
-          })};
-
-         <Route 
-          path="reset-password" 
-          element={<UnAuthorizedRoute 
-                    isLogedIn={logedIn} 
-                    redirectToHome={() => navigate("/")}
-                    Component={() => <ResetPassword />} 
-                    HomePageComponent={() => <Home />} 
-                    /> }  
-         />
-
-        <Route 
-          path="/" 
-          element={<AuthorizedPublicRoute 
-                    isLogedIn={logedIn} 
-                    UnAuthorizedPage={() => (
-                      <Login
-                      loginhandler={loginhandler}
-                      logOuthandler={logOuthandler}
+     <div style={{padding: "0 20px"}}>
+      <PermissionProvider userClaims={userClaimsState} userActions={actions}>
+          <Routes>
+            {/* privitae routes by router  */}
+            {routes.map((o: RoutesType) => {
+              return (
+                <Route
+                  key={o.moduleKey}
+                  path={o.to}
+                  element={
+                    <PrivateRoute
+                      isLogedIn={logedIn}
+                      pageKey={o.pageKeys?.pageKey}
+                      Component={o.Component}
+                      unAuthorizedPage={<Login
+                        loginhandler={loginhandler}
+                        logOuthandler={logOuthandler}
+                      />}
                     />
-                    )}
-                    Component={() => <Home />} 
-                  /> }  
-         />
+                  }
+                />
+              );
+            })};
 
-        <Route path='*' element={<h1>404 not found or no permission</h1>}/>
-        </Routes>
-     </PermissionProvider>
+          <Route 
+            path="reset-password" 
+            element={<UnAuthorizedRoute 
+                      isLogedIn={logedIn} 
+                      redirectToHome={() => navigate("/")}
+                      Component={() => <ResetPassword />} 
+                      HomePageComponent={() => <Home />} 
+                      /> }  
+          />
+
+          <Route 
+            path="/" 
+            element={<AuthorizedPublicRoute 
+                      isLogedIn={logedIn} 
+                      UnAuthorizedPage={() => (
+                        <Login
+                        loginhandler={loginhandler}
+                        logOuthandler={logOuthandler}
+                      />
+                      )}
+                      Component={() => <Home />} 
+                    /> }  
+          />
+
+          <Route path='*' element={<h1>404 not found or no permission</h1>}/>
+          </Routes>
+      </PermissionProvider>
+     </div>
     </div>
   );
 }
