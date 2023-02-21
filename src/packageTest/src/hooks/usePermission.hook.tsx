@@ -1,4 +1,4 @@
-import { Acceseses, UserPermissionReturnType } from "../types";
+import { UserPermissionReturnType } from "../types";
 import { useClaimns, useUserActions } from "./useClaims.hook";
 
 

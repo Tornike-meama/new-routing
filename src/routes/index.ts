@@ -1,5 +1,4 @@
-import { Modules } from '@Tornike-meama/ds-routing';
-
+import { Modules } from "../packageTest";
 import { ClientsModule } from "./ClientsModule/index";
 import { EcommerceModule } from "./EcommerceModule/index";
 import { HomeModule } from "./HomeModule";

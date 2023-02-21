@@ -1,21 +1,21 @@
 import {
-  Acceseses, 
   DrawerItem, 
   Modules, 
   PageRoutes, 
   RoutesType, 
-  RouterType, 
+  InitRouterReturnType, 
   ActionByPageKey 
 } from "../types";
-import { getValidUrl } from './common.helpers';
+import { getAccassesByModuleOrPageKeys, getValidUrl } from './common.helpers';
 
 //init router method which run first when applicaition load
-export function initRouter(claims: string[], allModule: Modules[]): RouterType {
+export function initRouter(claims: string[], allModule: Modules[]): InitRouterReturnType {
   //loop all module
   let allActions = {};
   let allRoutes: RoutesType[] = [];
   const allDrawerItems = allModule.reduce<DrawerItem[]>((acc, module) => {
     let accassesAndDrawitems = getDrawerItemrecursion(module.subPages, module.moduleKey, `/${module.name}`, claims, allActions, allRoutes);
+    //add actions and routes in main array
     allActions = {...allActions, ...accassesAndDrawitems.actions};
     allRoutes.push(...accassesAndDrawitems.routes);
     //if don't want show module in drawer
@@ -36,7 +36,7 @@ export function initRouter(claims: string[], allModule: Modules[]): RouterType {
   return {actions: allActions, routes: allRoutes, drawerItems: allDrawerItems};
 }
 
-//helper recursion method
+//recursion modules and subpages tree
 function getDrawerItemrecursion(
   pages: PageRoutes[],
   moduleKey: string,
@@ -44,13 +44,13 @@ function getDrawerItemrecursion(
   claims: string[],
   allActions: ActionByPageKey,
   routes: RoutesType[],
-): RouterType {
+): InitRouterReturnType {
 
-  const drawItems = pages.reduce<RouterType>((acc, page) => {
+  const drawItems = pages.reduce<InitRouterReturnType>((acc: InitRouterReturnType, page: PageRoutes) => {
     const actions = getAccassesByModuleOrPageKeys(moduleKey, page.pageKeys, claims)
     acc.actions = {...acc.actions, ...actions}
     //check if user have moduleKey, pagekey or access get action and check show in drawer
-    if (claims.some((key) => key === moduleKey || key === page.pageKeys.pageKey || key === page.pageKeys.get) && page.showDrawer ) {
+    if (claims.some((key) => key === moduleKey || key === page.pageKeys.pageKey || key === page.pageKeys.get)) {
       //drawer items
       let subPageItem = {
         name: page.name,
@@ -58,51 +58,30 @@ function getDrawerItemrecursion(
         childItems: [],
       } as DrawerItem;
 
-      //current router url
+      //current router url which is for routes and drawer
       const currentUrl = subPageItem.to ?? `${prevUrl}/${page.name.split(" ").join("")}`;
 
-      //set routes
+      //push routes in recursion routes arr
       if (page.component) {
-        routes.push({
-          to: currentUrl,
-          moduleKey: moduleKey,
-          pageKeys: page.pageKeys,
-          Component: page.component,
-        });
+        routes.push({to: currentUrl, moduleKey: moduleKey, pageKeys: page.pageKeys, Component: page.component});
       };
 
-      //recursion pages if have sub pages
-      if (page.subPages !== undefined && page.subPages?.length > 0) {
-        const subactions = getDrawerItemrecursion(
-          page.subPages,
-          moduleKey,
-          currentUrl,
-          claims,
-          allActions,
-          routes
-        );
-        subPageItem.childItems = subactions.drawerItems;
-        acc.actions = {...acc.actions, ...subactions.actions}
+      //if this item must in drawer
+      if(page.showDrawer) {
+        //recursion pages if have sub pages
+        if (page.subPages !== undefined && page.subPages?.length > 0) {
+          const subactions = getDrawerItemrecursion(page.subPages, moduleKey, currentUrl, claims, allActions, routes);
+          subPageItem.childItems = subactions.drawerItems;
+          acc.actions = {...acc.actions, ...subactions.actions}
+        };
+  
+        //finally when all item in tree and if this item must in drawer add in acc draweritems tree
+        acc.drawerItems.push(subPageItem);
       };
-
-      //finally when all item in tree add in acc draweritems tree
-      acc.drawerItems.push(subPageItem);
-    };
+    }
     
     return acc;
   }, {drawerItems: [], actions: {}, routes: [] });
 
   return drawItems;
-};
-
-
-function getAccassesByModuleOrPageKeys(moduleKey: string, pageKeys: Acceseses, userClaims: string[]) {
-  let actionsByPageKey = {[pageKeys.pageKey]: {}};
-  Object
-    .getOwnPropertyNames(pageKeys)
-    .forEach((key) => {
-      actionsByPageKey[pageKeys.pageKey] = 
-        {...actionsByPageKey[pageKeys.pageKey],[key]: userClaims.some((accasessKey) => pageKeys[key] === moduleKey || pageKeys?.pageKey === accasessKey || pageKeys[key] === accasessKey)}
-    });
-  return actionsByPageKey;
 };

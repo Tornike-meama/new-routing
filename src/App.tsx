@@ -151,6 +151,7 @@ function App() {
           <Routes>
             {/* privitae routes by router  */}
             {routes.map((o: RoutesType) => {
+              const Page = o.Component;
               return (
                 <Route
                   key={o.moduleKey}
@@ -159,7 +160,7 @@ function App() {
                     <PrivateRoute
                       isLogedIn={logedIn}
                       pageKey={o.pageKeys?.pageKey}
-                      Component={o.Component}
+                      component={<Page/>}
                       unAuthorizedPage={<Login
                         loginhandler={loginhandler}
                         logOuthandler={logOuthandler}
@@ -175,8 +176,8 @@ function App() {
             element={<UnAuthorizedRoute 
                       isLogedIn={logedIn} 
                       redirectToHome={() => navigate("/")}
-                      Component={() => <ResetPassword />} 
-                      HomePageComponent={() => <Home />} 
+                      component={<ResetPassword />} 
+                      homePageComponent={<Home />} 
                       /> }  
           />
 
@@ -184,13 +185,8 @@ function App() {
             path="/" 
             element={<AuthorizedPublicRoute 
                       isLogedIn={logedIn} 
-                      UnAuthorizedPage={() => (
-                        <Login
-                        loginhandler={loginhandler}
-                        logOuthandler={logOuthandler}
-                      />
-                      )}
-                      Component={() => <Home />} 
+                      unAuthorizedPage={<Login loginhandler={loginhandler} logOuthandler={logOuthandler} />}
+                      component={<Home />} 
                     /> }  
           />
 

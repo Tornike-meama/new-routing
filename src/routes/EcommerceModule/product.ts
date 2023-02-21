@@ -1,4 +1,4 @@
-import { PageRoutes } from '@Tornike-meama/ds-routing';
+import { PageRoutes } from "../../packageTest";
 import ProductPages from "../../pages/ProductPage";
 
 export const ProductPageKeys = {

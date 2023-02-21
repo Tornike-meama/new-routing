@@ -1,4 +1,4 @@
-import {Modules} from "@Tornike-meama/ds-routing"
+import { Modules } from "../../packageTest";
 import { ProductRoutes } from "./product";
 
 export const EcommerceModule: Modules = {

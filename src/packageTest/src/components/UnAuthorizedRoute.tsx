@@ -1,14 +1,14 @@
-import { memo } from 'react';
+import React, { memo } from 'react';
 import { UnAuthorizedRouteProps } from "../types";
 
-export const UnAuthorizedRoute = ({HomePageComponent, Component, redirectToHome, isLogedIn} : UnAuthorizedRouteProps) => {
+export const UnAuthorizedRoute = ({homePageComponent, component, redirectToHome, isLogedIn} : UnAuthorizedRouteProps) => {
 
   if(!isLogedIn) {
-    return <Component />
+    return <React.Fragment>{component}</React.Fragment>
   };
 
   redirectToHome();
-  return <HomePageComponent />
+  return <React.Fragment>{homePageComponent}</React.Fragment>
 };
 
 export default memo(UnAuthorizedRoute);

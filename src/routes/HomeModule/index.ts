@@ -1,4 +1,4 @@
-import {Modules} from "@Tornike-meama/ds-routing"
+import { Modules } from "../../packageTest";
 import { HomeRoutes } from "./home";
 
 export const HomeModule: Modules = {

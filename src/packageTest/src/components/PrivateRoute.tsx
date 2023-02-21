@@ -3,7 +3,7 @@ import { usePersmissions } from "../hooks";
 import { PrivteRouteProps } from "../types";
 
 export const PrivateRoute = ({
-  Component,
+  component,
   unAuthorizedPage,
   pageKey,
   isLogedIn,
@@ -14,7 +14,7 @@ export const PrivateRoute = ({
 
   if (!actions.get) return <h1>No permission</h1>;
 
-  return <Component />;
+  return <React.Fragment>{component}</React.Fragment>
 };
 
 export default memo<PrivteRouteProps>(PrivateRoute);

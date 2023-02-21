@@ -1,6 +1,6 @@
+import { usePersmissions } from "../packageTest";
 import { ClientsModule } from "../routes/ClientsModule";
 import { ClientPageKeys } from "../routes/ClientsModule/customer";
-import {usePersmissions} from "@Tornike-meama/ds-routing";
 
 const Customers = () => {
   const { actions: {add, update, remove} } = usePersmissions(ClientPageKeys.pageKey);

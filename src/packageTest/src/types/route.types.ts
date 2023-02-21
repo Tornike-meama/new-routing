@@ -13,11 +13,6 @@ export type RoutesType = {
   Component: () => JSX.Element;
 };
 
-export type DrawerRoutes = {
-  drawer: DrawerItem[];
-  routes: RoutesType[];
-};
-
 export type Acceseses = Record<string, string> & {
   pageKey: string;
   get?: string;
@@ -42,7 +37,7 @@ export type Modules = {
   subPages: PageRoutes[];
 };
 
-export type RouterType = {
+export type InitRouterReturnType = {
   drawerItems: DrawerItem[];
   routes: RoutesType[],
   actions: ActionByPageKey;

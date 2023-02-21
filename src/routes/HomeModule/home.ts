@@ -1,4 +1,4 @@
-import { PageRoutes } from "@Tornike-meama/ds-routing";
+import { PageRoutes } from "../../packageTest";
 import Home from "../../pages/Home";
 
 export const HomePageKeys = {

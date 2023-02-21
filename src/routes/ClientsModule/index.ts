@@ -1,5 +1,5 @@
-import { Modules } from '@Tornike-meama/ds-routing';
 
+import { Modules } from "../../packageTest";
 import { ClientRoutes } from "./customer";
 
 export const ClientsModule: Modules = {

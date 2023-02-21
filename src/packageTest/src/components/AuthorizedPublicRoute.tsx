@@ -1,13 +1,13 @@
-import { memo } from 'react';
+import React, { memo } from 'react';
 import { AuthorizedPublicRouteProps } from "../types/wrapper.types";
 
-export const AuthorizedPublicRoute = ({Component, UnAuthorizedPage, isLogedIn}: AuthorizedPublicRouteProps) => {
+export const AuthorizedPublicRoute = ({component, unAuthorizedPage, isLogedIn}: AuthorizedPublicRouteProps) => {
  
   if(!isLogedIn) {
-    return <UnAuthorizedPage />
+    return <React.Fragment>{unAuthorizedPage}</React.Fragment>
   }
   
-  return <Component />
+  return <React.Fragment>{component}</React.Fragment>
 };
 
 export default memo(AuthorizedPublicRoute);

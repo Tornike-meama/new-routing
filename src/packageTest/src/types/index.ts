@@ -7,10 +7,9 @@ export type {
 export type {
   Acceseses,
   DrawerItem,
-  DrawerRoutes,
   Modules,
   PageRoutes,
   RoutesType,
-  RouterType
+  InitRouterReturnType
 } from "./route.types";
 export type { PrivteRouteProps, UnAuthorizedRouteProps } from "./wrapper.types";

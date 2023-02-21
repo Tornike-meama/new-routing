@@ -1,4 +1,4 @@
-import { PageRoutes } from "@Tornike-meama/ds-routing";
+import { PageRoutes } from "../../packageTest";
 import CustomerAddOrUpdate from "../../pages/ClientAddOrUpdate";
 import ClientSubPage from "../../pages/ClientSubPage";
 import Customers from "../../pages/CustomerPage";
@@ -46,7 +46,14 @@ export const ListRoute: PageRoutes = {
         {
           url: "addOrUpdate/:id",
           name: "addOrUpdatewithId",
-          showDrawer: true,
+          showDrawer: false,
+          pageKeys: ClientAddOrUpdate,
+          component: CustomerAddOrUpdate,
+        },
+        {
+          url: "addOrUpdate",
+          name: "addOrUpdatewithoutId",
+          showDrawer: false,
           pageKeys: ClientAddOrUpdate,
           component: CustomerAddOrUpdate,
         },
