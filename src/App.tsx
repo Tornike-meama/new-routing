@@ -73,7 +73,7 @@ function App() {
     })
     .catch(() => setLogedIn(false));
     localStorage.setItem(tokenKey, "tes_user_token");
-    setLogedIn(true);
+    setLogedIn(false);
   };
   const logOuthandler = () => {
     localStorage.removeItem(tokenKey);
@@ -91,12 +91,12 @@ function App() {
   }
 
   useEffect(() => {
-    GetUserData()
-      .then((claims: string[]) => {
-        setUserClaimsState(claims);
-        setLogedIn(true);
-      })
-      .catch(() => setLogedIn(false));
+    // GetUserData()
+    //   .then((claims: string[]) => {
+    //     setUserClaimsState(claims);
+    //     setLogedIn(true);
+    //   })
+    //   .catch(() => setLogedIn(false));
   }, []);
 
   if (showLoading) return <h1>Loading</h1>;
@@ -182,6 +182,16 @@ function App() {
 
           <Route 
             path="/" 
+            element={<UnAuthorizedRoute 
+                      isLogedIn={logedIn} 
+                      redirectToHome={() => navigate("/")}
+                      component={<ResetPassword />} 
+                      homePageComponent={<Login loginhandler={loginhandler} logOuthandler={logOuthandler} />} 
+                      /> }  
+          />
+
+          <Route 
+            path="/" 
             element={<AuthorizedPublicRoute 
                       isLogedIn={logedIn} 
                       unAuthorizedPage={<Login loginhandler={loginhandler} logOuthandler={logOuthandler} />}
@@ -189,7 +199,7 @@ function App() {
                     /> }  
           />
 
-          <Route path='*' element={<h1>404 not found or no permission</h1>}/>
+          <Route path='*' element={logedIn ? <h1>404 not found or no permission11</h1> : <Login loginhandler={loginhandler} logOuthandler={logOuthandler} />}/>
           </Routes>
       </PermissionProvider>
      </div>
