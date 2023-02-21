@@ -1,5 +1,5 @@
 import React from 'react';
-import {usePersmissions} from "../packageTest";
+import {usePersmissions} from "@Tornike-meama/ds-routing";
 
 import { ProductPageKeys } from './../routes/EcommerceModule/product';
 

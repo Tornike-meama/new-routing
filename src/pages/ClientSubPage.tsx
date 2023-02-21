@@ -1,4 +1,4 @@
-import { usePersmissions } from "../packageTest";
+import { usePersmissions } from "@Tornike-meama/ds-routing";
 import { ClientSubPageKeys } from "../routes/ClientsModule/customer";
 
 const ClientSubPage = () => {

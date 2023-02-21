@@ -1,6 +1,6 @@
 import React from "react";
 import { useParams } from "react-router";
-import { usePersmissions } from "../packageTest";
+import { usePersmissions } from "@Tornike-meama/ds-routing";
 import { ClientAddOrUpdate, } from './../routes/ClientsModule/customer';
 
 const CustomerAddOrUpdate = () => {

@@ -1,3 +1,3 @@
-export { PrivateRoute } from "./PrivateRoute";
-export { UnAuthorizedRoute } from "./UnAuthorizedRoute";
-export { AuthorizedPublicRoute } from "./AuthorizedPublicRoute";
+export { default as PrivateRoute } from "./PrivateRoute";
+export { default as UnAuthorizedRoute } from "./UnAuthorizedRoute";
+export { default as AuthorizedPublicRoute } from "./AuthorizedPublicRoute";

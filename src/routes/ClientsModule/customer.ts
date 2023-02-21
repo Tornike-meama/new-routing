@@ -1,4 +1,4 @@
-import { PageRoutes } from "../../packageTest";
+import { PageRoutes } from "@Tornike-meama/ds-routing";
 import CustomerAddOrUpdate from "../../pages/ClientAddOrUpdate";
 import ClientSubPage from "../../pages/ClientSubPage";
 import Customers from "../../pages/CustomerPage";

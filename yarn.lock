@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@Tornike-meama/ds-routing@0.1.1":
-  version "0.1.1"
-  resolved "https://npm.pkg.github.com/download/@Tornike-meama/ds-routing/0.1.1/ba7d4eefdaf7f0a2990900a7773bc2b6756170bc#ba7d4eefdaf7f0a2990900a7773bc2b6756170bc"
-  integrity sha512-OL6V6amg57v94furQMZaJlcJqNGnhRT68eDcAmpMFF0PaSzxjpN2bLA2C8hm5EjOimNJhJRVRopPEDs9lsJsJw==
+"@Tornike-meama/ds-routing@0.2.0":
+  version "0.2.0"
+  resolved "https://npm.pkg.github.com/download/@Tornike-meama/ds-routing/0.2.0/ae681a4f9ec2cc1e2ba788c9405e32de74bcf471#ae681a4f9ec2cc1e2ba788c9405e32de74bcf471"
+  integrity sha512-txgT4oez13Pz2oTljYmyagHF6rLPEvr6prMqbTcPg3zRM+LHV0cxD4yjB7nrN/wKXWwZm2jWlZsF7CeImZEf7A==
 
 "@adobe/css-tools@^4.0.1":
   version "4.1.0"

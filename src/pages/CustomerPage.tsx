@@ -1,4 +1,4 @@
-import { usePersmissions } from "../packageTest";
+import { usePersmissions } from "@Tornike-meama/ds-routing";
 import { ClientsModule } from "../routes/ClientsModule";
 import { ClientPageKeys } from "../routes/ClientsModule/customer";
 

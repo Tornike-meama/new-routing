@@ -1,7 +1,7 @@
 import { ReactNode, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Route, Routes, useNavigate } from "react-router";
-import {DrawerItem, RoutesType, PrivateRoute, PermissionProvider, useInitRouter, UnAuthorizedRoute} from "./packageTest/index";
+import {DrawerItem, RoutesType, PrivateRoute, PermissionProvider, useInitDSRouter, UnAuthorizedRoute, AuthorizedPublicRoute} from "@Tornike-meama/ds-routing";
 
 import Login from "./pages/LogIn";
 
@@ -9,7 +9,6 @@ import "./App.css";
 import { allModule } from "./routes";
 import ResetPassword from "./pages/ResetPassword";
 import Home from "./pages/Home";
-import AuthorizedPublicRoute from "./packageTest/src/components/AuthorizedPublicRoute";
 
 const tokenKey = "userToken";
 
@@ -64,7 +63,7 @@ function App() {
   const [logedIn, setLogedIn] = useState<boolean>(false);
   const [userClaimsState, setUserClaimsState] = useState<string[]>([]);
 
-  const { drawerItems, routes, actions } = useInitRouter(userClaimsState, allModule);
+  const { drawerItems, routes, actions } = useInitDSRouter(userClaimsState, allModule);
   
   const loginhandler = () => {
     GetUserData()

@@ -17,5 +17,4 @@ export type Actions = Record<string, boolean> & {
 
 export type ActionByPageKey = {
   [key: string]: Actions
-}
-
+};
