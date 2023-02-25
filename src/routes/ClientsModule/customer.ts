@@ -1,4 +1,5 @@
 import { PageRoutes } from "@Tornike-meama/ds-routing";
+import B2BClients from "../../pages/B2BClients";
 import CustomerAddOrUpdate from "../../pages/ClientAddOrUpdate";
 import ClientSubPage from "../../pages/ClientSubPage";
 import Customers from "../../pages/CustomerPage";
@@ -64,7 +65,7 @@ export const ListRoute: PageRoutes = {
       name: "b2b client",
       showDrawer: true,
       pageKeys: ClientSubPageKeys2,
-      component: ClientSubPage,
+      component: B2BClients,
     },
   ],
 };
@@ -72,7 +73,7 @@ export const ListRoute: PageRoutes = {
 export const AddOrUpdate: PageRoutes = {
   url: "addOrUpdate",
   name: "addOrUpdate",
-  showDrawer: true,
+  showDrawer: false,
   pageKeys: ClientPageKeys,
   component: CustomerAddOrUpdate,
 };

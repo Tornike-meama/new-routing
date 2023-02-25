@@ -7,10 +7,15 @@ import Login from "./pages/LogIn";
 
 import "./App.css";
 import { allModule } from "./routes";
-import ResetPassword from "./pages/ResetPassword";
 import Home from "./pages/Home";
+import { API } from "./api";
 
 const tokenKey = "userToken";
+
+type LoginRepsonse = {
+  refreshToken: string;
+  token: string;
+}
 
 const Static_User_Claims = [
   "ProjectPolicys_HomeModule",
@@ -63,85 +68,117 @@ function App() {
   const [logedIn, setLogedIn] = useState<boolean>(false);
   const [userClaimsState, setUserClaimsState] = useState<string[]>([]);
 
-  const { drawerItems, routes, actions } = useInitDSRouter(userClaimsState, allModule);
+  const { drawerItems, routes: {privateRoutes, unAuthorizedRoutes, authorizedPublicRoutes}, actions } = useInitDSRouter(userClaimsState, allModule);
+  // unAuhorizedroutes?.map((o: any) => console.log(o, 'ooo'))
+  // console.log(auhorizePublicdroutes, "unAuhorizedroutes");
   
-  const loginhandler = () => {
+  const loginhandler = async () => {
+    let res = await API.post<LoginRepsonse>("/login", {email: "toko7bardanashvili@gmail.com", password: "Asdasd!23", withRefreshToken: true} );
+    if(res?.data && res.data?.token) {
+      API.setTokenInLocalStorage(res.data.token);
+      API.setRefreshTokenInLocalStorage(res.data.refreshToken);
+    }
     GetUserData()
-    .then((claims: string[]) => {
+    .then((data: any) => {
+      const claims: string[] = data.user?.roles?.flatMap((role: any) => role?.roleClaims?.map((o: string) => o));
       setUserClaimsState(claims);
       setLogedIn(true);
+      return claims;
     })
-    .catch(() => setLogedIn(false));
-    localStorage.setItem(tokenKey, "tes_user_token");
-    setLogedIn(false);
+    // .catch(() => setLogedIn(false));
+    // localStorage.setItem(tokenKey, "tes_user_token");
+    // setLogedIn(false);
   };
+  
   const logOuthandler = () => {
     localStorage.removeItem(tokenKey);
     setLogedIn(false);
   };
 
-  async function GetUserData(): Promise<string[]> {
+  async function GetUserData() {
     setShowLoading(true);
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve(Static_User_Claims);
-        setShowLoading(false);
-      }, 1000);
-    });
+    let res = await API.get<any>("/api/UIData/GetUserWithUIData");
+    setShowLoading(false);
+    const claims: string[] = res.data.user?.roles?.flatMap((role: any) => role?.roleClaims?.map((o: string) => o));
+    setUserClaimsState(claims);
+    setLogedIn(true);
+    return res.data;
+
+    // return new Promise((resolve, reject) => {
+    //   setTimeout(() => {
+    //   if(localStorage.getItem(tokenKey)) {
+    //     resolve(Static_User_Claims);
+    //   } else reject();
+    //     setShowLoading(false);
+    //   }, 1000);
+    // });
   }
 
   useEffect(() => {
-    // GetUserData()
-    //   .then((claims: string[]) => {
-    //     setUserClaimsState(claims);
-    //     setLogedIn(true);
-    //   })
-    //   .catch(() => setLogedIn(false));
+    GetUserData()
+      .catch(() => setLogedIn(false))
+      .finally(() =>  {
+        setShowLoading(false);
+      });
   }, []);
 
   if (showLoading) return <h1>Loading</h1>;
 
-  function generateDrawerItems(items: DrawerItem[]): JSX.Element[] {
-    return items.map((page: DrawerItem) => {
-      if (page?.childItems?.length) {
-        return page.to ? (
-          <li>
-            <Link className="subPages" to={page.to ?? ""} key={page.name}>
-              <div>{page.name}</div>
-              {generateDrawerItems(page.childItems)}
-            </Link>
-          </li>
-        ) : (
-          <li className="subPages" key={page.name}>
-            <div>{page.name}</div>
-            {generateDrawerItems(page.childItems)}
-          </li>
-        );
-      } else {
-        return page.to ? (
-          <li>
-            <Link className="subPages" to={page.to ?? ""} key={page.name}>
-              {page.name}
-            </Link>
-          </li>
-        ) : (
-          <li>{page.name}</li>
-        );
-      }
-    });
-  }
+  // function generateDrawerItems(items: DrawerItem[]): JSX.Element[] {
+  //   return items.map((page: DrawerItem) => {
+  //     if (page?.childItems?.length) {
+  //       return page.to ? (
+  //         <li>
+  //           <Link className="subPages" to={page.to ?? ""} key={page.name}>
+  //             <div>{page.name}</div>
+  //             {generateDrawerItems(page.childItems)}
+  //           </Link>
+  //         </li>
+  //       ) : (
+  //         <li className="subPages" key={page.name}>
+  //           <div>{page.name}</div>
+  //           {generateDrawerItems(page.childItems)}
+  //         </li>
+  //       );
+  //     } else {
+  //       return page.to ? (
+  //         <li>
+  //           <Link className="subPages" to={page.to ?? ""} key={page.name}>
+  //             {page.name}
+  //           </Link>
+  //         </li>
+  //       ) : (
+  //         <li>{page.name}</li>
+  //       );
+  //     }
+  //   });
+  // }
 
   return (
     <div className="App">
       <header className="App-header">
         <div className="header-container">
+          {logedIn && (
+            <>
+              <div style={{display: "flex", width: "100%", justifyContent: "end"}} >
+                <button onClick={logOuthandler}>loged out</button>
+              </div>
+            </>
+          )}
           <ul className="ul">
-          {logedIn && <li><div onClick={logOuthandler}>Log out</div></li>}
+          <li onClick={() => navigate("/")}>Home</li>
             {logedIn 
               ? generateDrawerExtenstion(drawerItems, 
                     (page: DrawerItem) => page.to 
                       ? <Link className="subPagesLink" to={page.to ?? ""} key={page.name}>{page.name}</Link> 
-                      : page.name ) : <li>you must log in</li>}
+                      : page.name ) : (
+                        <>
+                        <li style={{display: "flex", width: "100%", justifyContent: "end"}} >
+                          <button onClick={loginhandler}>loge in</button>
+                          <button onClick={() => navigate("reset-password")}>reset password</button>
+                        </li>
+                      </>
+                      )}
           </ul>
         </div>
       </header>
@@ -149,7 +186,7 @@ function App() {
       <PermissionProvider userClaims={userClaimsState} userActions={actions}>
           <Routes>
             {/* privitae routes by router  */}
-            {routes.map((o: RoutesType) => {
+            {privateRoutes.map((o: RoutesType) => {
               const Page = o.Component;
               return (
                 <Route
@@ -170,25 +207,42 @@ function App() {
               );
             })};
 
-          <Route 
-            path="reset-password" 
-            element={<UnAuthorizedRoute 
-                      isLogedIn={logedIn} 
-                      redirectToHome={() => navigate("/")}
-                      component={<ResetPassword />} 
-                      homePageComponent={<Home />} 
-                      /> }  
-          />
+            {/* unAuhorized routes  */}
+            {unAuthorizedRoutes.map((o: RoutesType) => {
+              const Page = o.Component;
+              return (
+                <Route 
+                key={o.to}
+                path={o.to}
+                element={<UnAuthorizedRoute 
+                          isLogedIn={logedIn} 
+                          redirectToHome={() => navigate("/")}
+                          homePageComponent={<Home />}
+                          component={<Page />} 
+                        /> }  
+                />
+            )
+            })}
 
-          <Route 
-            path="/" 
-            element={<UnAuthorizedRoute 
-                      isLogedIn={logedIn} 
-                      redirectToHome={() => navigate("/")}
-                      component={<ResetPassword />} 
-                      homePageComponent={<Login loginhandler={loginhandler} logOuthandler={logOuthandler} />} 
-                      /> }  
-          />
+            {/* authorized public routes */}
+            {authorizedPublicRoutes.map((o: RoutesType) => {
+              const Page = o.Component;
+              return (
+                <Route 
+                key={o.to}
+                path={o.to}
+                element={<AuthorizedPublicRoute 
+                          isLogedIn={logedIn} 
+                          unAuthorizedPage={<Login
+                            loginhandler={loginhandler}
+                            logOuthandler={logOuthandler}
+                          />} 
+                          component={<Page />} 
+                        /> }  
+                />
+              )
+            })}
+                      
 
           <Route 
             path="/" 
@@ -200,6 +254,7 @@ function App() {
           />
 
           <Route path='*' element={logedIn ? <h1>404 not found or no permission11</h1> : <Login loginhandler={loginhandler} logOuthandler={logOuthandler} />}/>
+          
           </Routes>
       </PermissionProvider>
      </div>

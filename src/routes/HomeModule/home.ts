@@ -1,4 +1,4 @@
-import { PageRoutes } from "@Tornike-meama/ds-routing";
+import { AuthorizedPublicKey, PageRoutes } from "@Tornike-meama/ds-routing";
 import Home from "../../pages/Home";
 
 export const HomePageKeys = {
@@ -10,9 +10,16 @@ export const HomePageKeys = {
 export const HomeListRoutes: PageRoutes = {
   url: "/",
   name: "Homes page",
-  showDrawer: true,
-  pageKeys: HomePageKeys,
+  pageKeys: {pageKey: AuthorizedPublicKey},
   component: Home,
 };
 
-export const HomeRoutes: PageRoutes[] = [HomeListRoutes];
+export const HomeListRoutes1: PageRoutes = {
+  url: "home",
+  name: "Homes page with home",
+  pageKeys: {pageKey: AuthorizedPublicKey},
+  component: Home,
+};
+
+
+export const HomeRoutes: PageRoutes[] = [HomeListRoutes1];

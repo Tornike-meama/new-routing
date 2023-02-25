@@ -1,9 +1,8 @@
-import { Modules } from "@Tornike-meama/ds-routing";
+import { AuthorizedPublicKey, Modules } from "@Tornike-meama/ds-routing";
 import { HomeRoutes } from "./home";
 
 export const HomeModule: Modules = {
-  moduleKey: "ProjectPolicys_HomeModule",
+  moduleKey: AuthorizedPublicKey,
   name: "",
-  showDrawer: false,
   subPages: [...HomeRoutes],
 };
