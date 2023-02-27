@@ -1,11 +1,6 @@
 import { AuthorizedPublicKey, PageRoutes } from "@Tornike-meama/ds-routing";
-import Home from "../../pages/Home";
+import Home from "../../../pages/Home";
 
-export const HomePageKeys = {
-  pageKey: "ProjectPolicys_ECommerceModule_HomePage",
-  get: "ProjectPolicys_ECommerceModule_HomePage_Get",
-  add: "ProjectPolicys_ECommerceModule_HomePage_Add",
-} as const;
 
 export const HomeListRoutes: PageRoutes = {
   url: "/",
@@ -15,7 +10,7 @@ export const HomeListRoutes: PageRoutes = {
 };
 
 export const HomeListRoutes1: PageRoutes = {
-  url: "home",
+  url: "/",
   name: "Homes page with home",
   pageKeys: {pageKey: AuthorizedPublicKey},
   component: Home,

@@ -1,6 +1,6 @@
 import { usePersmissions } from "@Tornike-meama/ds-routing";
-import { ClientsModule } from "../routes/ClientsModule";
-import { ClientPageKeys } from "../routes/ClientsModule/customer";
+import { ClientsModule } from "../routes/private/ClientsModule";
+import { ClientPageKeys } from "../routes/private/ClientsModule/customer";
 
 const Customers = () => {
   const { actions: {add, update, remove} } = usePersmissions(ClientPageKeys.pageKey);

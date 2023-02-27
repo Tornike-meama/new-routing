@@ -77,7 +77,7 @@ function App() {
     if(res?.data && res.data?.token) {
       API.setTokenInLocalStorage(res.data.token);
       API.setRefreshTokenInLocalStorage(res.data.refreshToken);
-    }
+    };
     GetUserData()
     .then((data: any) => {
       const claims: string[] = data.user?.roles?.flatMap((role: any) => role?.roleClaims?.map((o: string) => o));
@@ -233,25 +233,14 @@ function App() {
                 path={o.to}
                 element={<AuthorizedPublicRoute 
                           isLogedIn={logedIn} 
-                          unAuthorizedPage={<Login
-                            loginhandler={loginhandler}
-                            logOuthandler={logOuthandler}
-                          />} 
+                          unAuthorizedPage={
+                            <Login loginhandler={loginhandler} logOuthandler={logOuthandler} />
+                          } 
                           component={<Page />} 
                         /> }  
                 />
               )
             })}
-                      
-
-          <Route 
-            path="/" 
-            element={<AuthorizedPublicRoute 
-                      isLogedIn={logedIn} 
-                      unAuthorizedPage={<Login loginhandler={loginhandler} logOuthandler={logOuthandler} />}
-                      component={<Home />} 
-                    /> }  
-          />
 
           <Route path='*' element={logedIn ? <h1>404 not found or no permission11</h1> : <Login loginhandler={loginhandler} logOuthandler={logOuthandler} />}/>
           

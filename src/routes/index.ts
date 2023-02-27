@@ -1,8 +1,7 @@
 import { Modules } from "@Tornike-meama/ds-routing";
-import { ClientsModule } from "./ClientsModule/index";
-import { EcommerceModule } from "./EcommerceModule/index";
-import { HomeModule } from "./HomeModule";
-import { UnAtuhorizedModule } from "./UnAuthorized";
+import { EcommerceModule, ClientsModule } from "./private";
+import { HomeModule } from "./authorizedPublic";
+import { UnAtuhorizedModule } from "./unAuthorized";
 
 export const allModule: Modules[] = [
   ClientsModule,
@@ -10,3 +9,7 @@ export const allModule: Modules[] = [
   UnAtuhorizedModule,
   HomeModule,
 ];
+
+export * from "./unAuthorized";
+export * from "./authorizedPublic";
+export * from "./private";

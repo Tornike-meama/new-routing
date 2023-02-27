@@ -7,3 +7,5 @@ export const EcommerceModule: Modules = {
   showDrawer: true,
   subPages: [...ProductRoutes],
 };
+
+export * from "./product";

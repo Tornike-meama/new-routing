@@ -1,5 +1,5 @@
 import { PageRoutes } from "@Tornike-meama/ds-routing";
-import ProductPages from "../../pages/ProductPage";
+import ProductPages from "../../../pages/ProductPage";
 
 export const ProductPageKeys = {
   pageKey: "ProjectPolicys_ECommerceModule_ProductPage",

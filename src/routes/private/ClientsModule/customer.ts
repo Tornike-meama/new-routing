@@ -1,8 +1,8 @@
 import { PageRoutes } from "@Tornike-meama/ds-routing";
-import B2BClients from "../../pages/B2BClients";
-import CustomerAddOrUpdate from "../../pages/ClientAddOrUpdate";
-import ClientSubPage from "../../pages/ClientSubPage";
-import Customers from "../../pages/CustomerPage";
+import B2BClients from "../../../pages/B2BClients";
+import CustomerAddOrUpdate from "../../../pages/ClientAddOrUpdate";
+import ClientSubPage from "../../../pages/ClientSubPage";
+import Customers from "../../../pages/CustomerPage";
 
 export const ClientPageKeys = {
   pageKey: "ProjectPolicys_CustomersModule_CustomerPage",

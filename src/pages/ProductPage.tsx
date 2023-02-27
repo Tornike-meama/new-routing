@@ -1,7 +1,7 @@
 import React from 'react';
 import {usePersmissions} from "@Tornike-meama/ds-routing";
+import { ProductPageKeys } from '../routes/private/EcommerceModule/product';
 
-import { ProductPageKeys } from './../routes/EcommerceModule/product';
 
 const ProductPages = () => {
   const {actions: {get, add, remove, update, downlaodFile}} = usePersmissions(ProductPageKeys.pageKey)

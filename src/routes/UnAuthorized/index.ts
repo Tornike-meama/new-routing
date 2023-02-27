@@ -1,6 +1,6 @@
 
 import { Modules, PageRoutes, UnAuthorizedKey } from '@Tornike-meama/ds-routing';
-import ResetPassword from './../../pages/ResetPassword';
+import ResetPassword from '../../pages/ResetPassword';
 
 
 export const ResetPasswordRoute : PageRoutes = {
